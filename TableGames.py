@@ -4,7 +4,7 @@ import csv
 # Reading/opening the CSV
 def read_persons_csv(persons.csv):
     persons = []
-    with open(filename, newline='') as csvfile:
+    with open(persons.csv, newline='') as csvfile:
         reader = csv.reader(csvfile)
         # Skip the header row
         next(reader)
@@ -21,11 +21,25 @@ def read_persons_csv(persons.csv):
             }
             persons.append(person)
     return persons
+    # Find the amount the person will bet
+def get_bet_amount(person):
+    # Determine the bet amount based on the person's salary and savings
+    bet_percentage = (person['salary'] + person['savings']) / 100000
+    bet_amount = bet_percentage * random.randint(1, 10) * 10
+    return round(bet_amount)
+
+def simulate_game(deck_count, player):
+    # Determine the bet amount for this simulation run
+    bet_amount = get_bet_amount(player)
+    if bet_amount == 0:
+        print(f"{player['first_name']} {player['last_name']} ({player['occupation']}) isn't betting anything this round.")
+        return
+    
 def simulate_game(deck_count, min_bet, max_bet, player):
     # Set up the game
     player_hand = [draw_card() for _ in range(2)]
     dealer_hand = [draw_card(), draw_card()]
-    player_bet = random.randint(min_bet, max_bet)
+    bet_amount = random.randint(min_bet, max_bet)
 
     # Player's turn
     while get_hand_value(player_hand) < 21:
